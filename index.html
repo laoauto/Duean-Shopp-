@@ -44,6 +44,31 @@ th{color:var(--sub);background:rgba(0,0,0,.02);font-size:11px;}
 .toast.on{opacity:1;transform:translateX(0);}
 .tbar{height:3px;position:absolute;bottom:0;left:0;animation:tb 3.2s linear forwards;}
 @keyframes tb{from{width:100%}to{width:0%}}
+/* ── Success Popup ── */
+.spov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9500;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
+.spov.on{display:flex;animation:spFdIn .25s ease;}
+@keyframes spFdIn{from{opacity:0}to{opacity:1}}
+.spbox{background:var(--card);border-radius:22px;width:100%;max-width:340px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:spUp .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes spUp{from{transform:translateY(40px) scale(.92);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+.sphead{padding:28px 20px 20px;text-align:center;position:relative;}
+.sphead-icon{font-size:54px;margin-bottom:10px;display:block;animation:spBounce .5s ease .1s both;}
+@keyframes spBounce{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.sphead-title{font-size:18px;font-weight:800;margin-bottom:4px;}
+.sphead-sub{font-size:12px;opacity:.75;line-height:1.5;}
+.spbody{padding:0 18px 8px;}
+.sprow{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:10px;margin-bottom:6px;}
+.sprow-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.sprow-label{font-size:11px;opacity:.65;margin-bottom:1px;}
+.sprow-val{font-size:13px;font-weight:700;}
+.spfoot{padding:14px 18px 20px;display:flex;gap:8px;}
+.spfoot button{flex:1;padding:12px;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;}
+.spfoot .sp-close{background:rgba(0,0,0,.06);color:var(--sub);}
+.spfoot .sp-ok{background:var(--p);color:#fff;}
+/* confetti dots */
+.sp-confetti{position:absolute;top:0;left:0;right:0;height:100%;pointer-events:none;overflow:hidden;}
+.sp-dot{position:absolute;width:8px;height:8px;border-radius:50%;animation:spDot 1.2s ease-out forwards;}
+@keyframes spDot{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(-120px) rotate(360deg);opacity:0;}}
+
 /* ── Dialog ── */
 .dov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9000;display:none;align-items:center;justify-content:center;padding:20px;}
 .dov.on{display:flex;}
@@ -465,15 +490,15 @@ input:checked+.sldr::before{transform:translateX(18px);}
         <div id="a-sn" style="font-weight:700;font-size:15px"></div>
         <div id="a-clk" style="font-size:10px;opacity:.85;margin-top:1px"></div>
       </div>
-      <button onclick="aLogout()" style="background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 11px;font-size:11px;cursor:pointer;flex-shrink:0">ອອກ</button>
+      <button onclick="aLogout()" style="background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 11px;font-size:11px;cursor:pointer;flex-shrink:0">ອອກຈາກລະບົບ</button>
     </div>
   </div>
 
   <!-- P0: Dashboard -->
   <div id="ap0" class="apg on">
     <div class="sgrid">
-      <div class="scard"><div class="sv" id="ds-o">—</div><div class="sl">Orders</div></div>
-      <div class="scard"><div class="sv" id="ds-s">—</div><div class="sl">ຍອດ ₭</div></div>
+      <div class="scard"><div class="sv" id="ds-o">—</div><div class="sl">ຈຳນວນອໍເດີ</div></div>
+      <div class="scard"><div class="sv" id="ds-s">—</div><div class="sl">ຍອດຂາຍ ₭</div></div>
       <div class="scard"><div class="sv" id="ds-p" style="color:var(--s)">—</div><div class="sl">ກຳໄລ ₭</div></div>
     </div>
     <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:9px">📈 ຍອດ 30 ວັນ</div><div style="height:170px"><canvas id="a-ch"></canvas></div></div>
@@ -484,31 +509,31 @@ input:checked+.sldr::before{transform:translateX(18px);}
   <div id="ap1" class="apg">
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
-        <b style="font-size:13px">📋 Orders</b>
+        <b style="font-size:13px">📋 ລາຍການອໍເດີລູກຄ້າ</b>
         <div style="display:flex;gap:5px">
-          <button class="btn btn-p btn-sm" onclick="aLoadOrders()">🔄</button>
-          <button class="btn btn-gh btn-sm" onclick="aPrintAll()">🖨️</button>
+          <button class="btn btn-p btn-sm" onclick="aLoadOrders()">🔄 ໂຫຼດໃໝ່</button>
+          <button class="btn btn-gh btn-sm" onclick="aPrintAll()">🖨️ ພີ່ມທັງໝົດ</button>
         </div>
       </div>
       <div style="display:flex;gap:5px;margin-bottom:7px;flex-wrap:wrap">
         <input type="date" id="a-odate" style="flex:1;min-width:115px;padding:6px 8px;border:1px solid var(--br);border-radius:6px;font-size:12px;background:var(--inp);color:var(--tx)" onchange="aFiltOrd()">
-        <button class="btn btn-gh btn-sm" onclick="document.getElementById('a-odate').value='';aFiltOrd()">ທຸກ</button>
+        <button class="btn btn-gh btn-sm" onclick="document.getElementById('a-odate').value='';aFiltOrd()">ທຸກວັນ</button>
         <button class="btn btn-p btn-sm" onclick="aOrdToday()">ມື້ນີ້</button>
       </div>
       <div class="ofr">
         <input type="text" id="a-osch" placeholder="🔍 ຄົ້ນຫາ..." style="flex:1;min-width:110px;padding:5px 9px;border:1px solid var(--br);border-radius:20px;font-size:12px;background:var(--inp);color:var(--tx)" oninput="aFiltOrd()">
-        <button class="fb on" onclick="aFiltSt('',this)">ທຸກ</button>
-        <button class="fb" onclick="aFiltSt('ລໍຖ້າຮັບຍອດ',this)">ໃໝ່</button>
-        <button class="fb" onclick="aFiltSt('ແມ່ຄ້າຮັບຍອດແລ້ວ',this)">ຮັບ</button>
-        <button class="fb" onclick="aFiltSt('ກຳລັງກຽມການຈັດສົ່ງ',this)">ກຽມ</button>
-        <button class="fb" onclick="aFiltSt('ຈັດສົ່ງສຳເລັດ',this)">ສ່ງ</button>
+        <button class="fb on" onclick="aFiltSt('',this)">ທັງໝົດ</button>
+        <button class="fb" onclick="aFiltSt('ລໍຖ້າຮັບຍອດ',this)">ລໍຖ້າ</button>
+        <button class="fb" onclick="aFiltSt('ແມ່ຄ້າຮັບຍອດແລ້ວ',this)">ຮັບຍອດ</button>
+        <button class="fb" onclick="aFiltSt('ກຳລັງກຽມການຈັດສົ່ງ',this)">ກຽມສົ່ງ</button>
+        <button class="fb" onclick="aFiltSt('ຈັດສົ່ງສຳເລັດ',this)">ສົ່ງແລ້ວ</button>
       </div>
       <div id="a-ocnt" style="font-size:11px;color:var(--sub);margin-bottom:7px"></div>
       <div id="a-osb" class="osb" style="display:none">
-        <div><div style="font-weight:700;font-size:14px;color:var(--p)" id="os-t">0</div><div style="font-size:10px;color:var(--sub)">ທຸກ</div></div>
-        <div><div style="font-weight:700;font-size:14px;color:var(--w)" id="os-w">0</div><div style="font-size:10px;color:var(--sub)">ລໍ</div></div>
-        <div><div style="font-weight:700;font-size:14px;color:var(--g)" id="os-d">0</div><div style="font-size:10px;color:var(--sub)">ສ່ງ</div></div>
-        <div><div style="font-weight:700;font-size:14px;color:var(--p)" id="os-a">0₭</div><div style="font-size:10px;color:var(--sub)">ຍອດ</div></div>
+        <div><div style="font-weight:700;font-size:14px;color:var(--p)" id="os-t">0</div><div style="font-size:10px;color:var(--sub)">ທັງໝົດ</div></div>
+        <div><div style="font-weight:700;font-size:14px;color:var(--w)" id="os-w">0</div><div style="font-size:10px;color:var(--sub)">ລໍຖ້າ</div></div>
+        <div><div style="font-weight:700;font-size:14px;color:var(--g)" id="os-d">0</div><div style="font-size:10px;color:var(--sub)">ສົ່ງແລ້ວ</div></div>
+        <div><div style="font-weight:700;font-size:14px;color:var(--p)" id="os-a">0₭</div><div style="font-size:10px;color:var(--sub)">ຍອດລວມ</div></div>
       </div>
       <div id="a-olist"><div class="empty"><div class="eic">📋</div>ກົດ 🔄 ໂຫຼດ</div></div>
     </div>
@@ -535,8 +560,8 @@ input:checked+.sldr::before{transform:translateX(18px);}
     </div>
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
-        <b style="font-size:13px">📦 ສິນຄ້າ</b>
-        <button class="btn btn-gh btn-sm" onclick="aLoadStk()">🔄</button>
+        <b style="font-size:13px">📦 ລາຍການສິນຄ້າໃນຄັງ</b>
+        <button class="btn btn-gh btn-sm" onclick="aLoadStk()">🔄 ໂຫຼດໃໝ່</button>
       </div>
       <div id="a-stklist"><div class="ldc"><div class="spin"></div></div></div>
     </div>
@@ -583,8 +608,8 @@ input:checked+.sldr::before{transform:translateX(18px);}
             <div id="pos-clist"></div>
             <div style="text-align:right;font-weight:700;font-size:13px;margin:6px 0;color:var(--p)">ລວມ: <span id="pos-ctot">0</span> ₭</div>
             <div style="display:flex;gap:5px">
-              <button class="btn btn-gh btn-sm" style="flex:1" onclick="posPrint()">🖨️</button>
-              <button class="btn btn-p btn-sm" style="flex:1" onclick="posSub()">✅ ບັນທຶກ</button>
+              <button class="btn btn-gh btn-sm" style="flex:1" onclick="posPrint()">🖨️ ພີ່ມໃບບິນ</button>
+              <button class="btn btn-p btn-sm" style="flex:1" onclick="posSub()">✅ ບັນທຶກການຂາຍ</button>
             </div>
           </div>
         </div>
@@ -595,7 +620,7 @@ input:checked+.sldr::before{transform:translateX(18px);}
   <!-- P4: Report -->
   <div id="ap4" class="apg">
     <div class="card">
-      <div style="font-size:13px;font-weight:700;margin-bottom:9px">📊 ສະຫຼຸບ</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:9px">📊 ສະຫຼຸບລາຍງານການຂາຍ</div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px">
         <input type="date" id="r-fr" style="flex:1;min-width:120px;padding:6px;border:1px solid var(--br);border-radius:6px;font-size:12px;background:var(--inp);color:var(--tx)">
         <input type="date" id="r-to" style="flex:1;min-width:120px;padding:6px;border:1px solid var(--br);border-radius:6px;font-size:12px;background:var(--inp);color:var(--tx)">
@@ -604,19 +629,19 @@ input:checked+.sldr::before{transform:translateX(18px);}
         <button class="btn btn-p btn-sm" onclick="aRepRange('today')">ມື້ນີ້</button>
         <button class="btn btn-gh btn-sm" onclick="aRepRange('week')">7 ວັນ</button>
         <button class="btn btn-gh btn-sm" onclick="aRepRange('month')">30 ວັນ</button>
-        <button class="btn btn-gh btn-sm" onclick="aRepRange('all')">ທຸກ</button>
+        <button class="btn btn-gh btn-sm" onclick="aRepRange('all')">ທັງໝົດ</button>
       </div>
       <div class="kgrid">
-        <div class="kpi" style="background:rgba(52,152,219,.07);border-color:rgba(52,152,219,.3)"><b id="r-o" style="color:var(--b)">0</b><span>Orders</span></div>
-        <div class="kpi" style="background:rgba(var(--p3),.07);border-color:rgba(var(--p3),.3)"><b id="r-s" style="color:var(--p)">0₭</b><span>ຍອດ</span></div>
-        <div class="kpi" style="background:rgba(231,76,60,.07);border-color:rgba(231,76,60,.3)"><b id="r-c" style="color:var(--d)">0₭</b><span>ທຶນ</span></div>
-        <div class="kpi" style="background:rgba(244,143,177,.1);border-color:rgba(244,143,177,.3)"><b id="r-p" style="color:var(--s)">0₭</b><span>ກຳໄລ</span></div>
+        <div class="kpi" style="background:rgba(52,152,219,.07);border-color:rgba(52,152,219,.3)"><b id="r-o" style="color:var(--b)">0</b><span>ຈຳນວນລາຍການ</span></div>
+        <div class="kpi" style="background:rgba(var(--p3),.07);border-color:rgba(var(--p3),.3)"><b id="r-s" style="color:var(--p)">0₭</b><span>ຍອດຂາຍລວມ</span></div>
+        <div class="kpi" style="background:rgba(231,76,60,.07);border-color:rgba(231,76,60,.3)"><b id="r-c" style="color:var(--d)">0₭</b><span>ຕົ້ນທຶນລວມ</span></div>
+        <div class="kpi" style="background:rgba(244,143,177,.1);border-color:rgba(244,143,177,.3)"><b id="r-p" style="color:var(--s)">0₭</b><span>ກຳໄລລວມ</span></div>
       </div>
     </div>
-    <div class="card"><b style="font-size:13px">🏪 ຕໍ່ສິນຄ້າ</b><div id="r-ptbl" style="margin-top:9px;overflow-x:auto"></div></div>
+    <div class="card"><b style="font-size:13px">🏪 ສະຫຼຸບຕໍ່ສິນຄ້າ</b><div id="r-ptbl" style="margin-top:9px;overflow-x:auto"></div></div>
     <div class="card">
-      <b style="font-size:13px">🧾 ບິນ</b>
-      <input type="text" id="r-sch" placeholder="🔍 ຄົ້ນຫາ..." style="width:100%;margin:7px 0;padding:6px 9px;border:1px solid var(--br);border-radius:6px;font-size:12px;background:var(--inp);color:var(--tx)" oninput="aRepFil()">
+      <b style="font-size:13px">🧾 ທຸກລາຍການບິນ</b>
+      <input type="text" id="r-sch" placeholder="🔍 ຄົ້ນຫາ ຊື່ / ສິນຄ້າ..." style="width:100%;margin:7px 0;padding:6px 9px;border:1px solid var(--br);border-radius:6px;font-size:12px;background:var(--inp);color:var(--tx)" oninput="aRepFil()">
       <div id="r-bills"></div>
     </div>
   </div>
@@ -625,16 +650,16 @@ input:checked+.sldr::before{transform:translateX(18px);}
   <div id="ap5" class="apg">
     <div class="card">
       <div style="display:flex;gap:5px;margin-bottom:9px">
-        <button id="hb1" class="btn btn-p" style="flex:1;padding:8px" onclick="aHis(1)">💰 ຂາຍ</button>
-        <button id="hb2" class="btn btn-gh" style="flex:1;padding:8px" onclick="aHis(2)">📦 ສະຕ໋ອກ</button>
+        <button id="hb1" class="btn btn-p" style="flex:1;padding:8px" onclick="aHis(1)">💰 ປະຫວັດການຂາຍ</button>
+        <button id="hb2" class="btn btn-gh" style="flex:1;padding:8px" onclick="aHis(2)">📦 ປະຫວັດສະຕ໋ອກ</button>
       </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px">
         <input type="date" id="h-dt" style="flex:1;min-width:120px;padding:6px;border:1px solid var(--br);border-radius:6px;font-size:12px;background:var(--inp);color:var(--tx)">
-        <input type="text" id="h-sch" placeholder="🔍" style="flex:1;min-width:100px;padding:6px;border:1px solid var(--br);border-radius:6px;font-size:12px;background:var(--inp);color:var(--tx)" oninput="aRenHis(aCurH)">
+        <input type="text" id="h-sch" placeholder="🔍 ຄົ້ນຫາ ຊື່ / ສິນຄ້າ..." style="flex:1;min-width:100px;padding:6px;border:1px solid var(--br);border-radius:6px;font-size:12px;background:var(--inp);color:var(--tx)" oninput="aRenHis(aCurH)">
       </div>
       <div style="display:flex;gap:5px;margin-bottom:9px">
-        <button class="btn btn-p btn-sm" style="flex:1" onclick="aHisF()">🔍</button>
-        <button class="btn btn-gh btn-sm" style="flex:1" onclick="aHisClr()">✕</button>
+        <button class="btn btn-p btn-sm" style="flex:1" onclick="aHisF()">🔍 ຄົ້ນຫາ</button>
+        <button class="btn btn-gh btn-sm" style="flex:1" onclick="aHisClr()">✕ ລ້າງຟີລເຕີ</button>
       </div>
       <div id="h-con"></div>
     </div>
@@ -643,35 +668,35 @@ input:checked+.sldr::before{transform:translateX(18px);}
   <!-- P6: Settings -->
   <div id="ap6" class="apg">
     <div class="setsec">
-      <h4>🏪 ຮ້ານ</h4>
+      <h4>🏪 ຂໍ້ມູນຮ້ານ</h4>
       <div class="setr"><label>ຊື່ຮ້ານ</label><input type="text" id="set-nm"></div>
-      <div class="setr"><label>Logo URL</label><input type="url" id="set-logo"></div>
-      <div class="setr"><label>QR URL</label><input type="url" id="set-qr"></div>
-      <div class="setr"><label>Password</label><input type="text" id="set-pwd"></div>
+      <div class="setr"><label>ລິ້ງໂລໂກ້</label><input type="url" id="set-logo"></div>
+      <div class="setr"><label>ລິ້ງ QR ຊຳລະ</label><input type="url" id="set-qr"></div>
+      <div class="setr"><label>ລະຫັດຜ່ານ</label><input type="text" id="set-pwd"></div>
     </div>
     <div class="setsec">
-      <h4>🎨 ສີ</h4>
+      <h4>🎨 ສີ ແລະ ໜ້າຕາ</h4>
       <div class="setr"><label>ສີຫຼັກ</label><input type="color" id="set-col" value="#C2185B" onchange="aApplyCol(this.value)"></div>
       <div class="csws" id="csws"></div>
-      <div class="setr" style="margin-top:9px"><label>Dark Mode</label><label class="tgl"><input type="checkbox" id="set-dk" onchange="aDark(this.checked)"><span class="sldr"></span></label></div>
+      <div class="setr" style="margin-top:9px"><label>ໂໝດມືດ (Dark)</label><label class="tgl"><input type="checkbox" id="set-dk" onchange="aDark(this.checked)"><span class="sldr"></span></label></div>
     </div>
     <div class="setsec">
-      <h4>📢 Ticker</h4>
+      <h4>📢 ຂໍ້ຄວາມ Ticker ຄ້ວນ</h4>
       <textarea id="set-tick" rows="3" style="width:100%;padding:8px;border:1.5px solid var(--br);border-radius:8px;font-size:12px;background:var(--inp);color:var(--tx)" placeholder="ຂໍ້ຄວາມ Ticker..."></textarea>
       <div style="display:flex;gap:6px;margin-top:6px">
-        <button class="btn btn-gh btn-sm" style="flex:1" onclick="aLoadBanner()">🔄 ໂຫຼດ</button>
-        <button class="btn btn-p btn-sm" style="flex:1" onclick="aSaveBanner()">💾 Save</button>
+        <button class="btn btn-gh btn-sm" style="flex:1" onclick="aLoadBanner()">🔄 ໂຫຼດຈາກ Server</button>
+        <button class="btn btn-p btn-sm" style="flex:1" onclick="aSaveBanner()">💾 ບັນທຶກ Ticker</button>
       </div>
     </div>
-    <button class="btn btn-p" style="width:100%;padding:13px;margin-bottom:28px" onclick="aSaveSet()">💾 ບັນທຶກ</button>
+    <button class="btn btn-p" style="width:100%;padding:13px;margin-bottom:28px" onclick="aSaveSet()">💾 ບັນທຶກການຕັ້ງຄ່າທັງໝົດ</button>
   </div>
 
   <!-- Admin Nav -->
   <div class="anav">
-    <div class="ani on" onclick="aNav(0)"><div class="ic">🏠</div>ຫຼັກ</div>
-    <div class="ani" onclick="aNav(1);aLoadOrders()"><div class="ic">📋</div>Order</div>
+    <div class="ani on" onclick="aNav(0)"><div class="ic">🏠</div>ໜ້າຫຼັກ</div>
+    <div class="ani" onclick="aNav(1);aLoadOrders()"><div class="ic">📋</div>ອໍເດີ</div>
     <div class="ani" onclick="aNav(2);aLoadStk()"><div class="ic">📦</div>ສິນຄ້າ</div>
-    <div class="ani" onclick="aNav(3);posLoad()"><div class="ic">🛒</div>POS</div>
+    <div class="ani" onclick="aNav(3);posLoad()"><div class="ic">🛒</div>ຂາຍ POS</div>
     <div class="ani" onclick="aNav(4);aLoadRep()"><div class="ic">📊</div>ລາຍງານ</div>
     <div class="ani" onclick="aNav(5);aLoadHis()"><div class="ic">📜</div>ປະຫວັດ</div>
     <div class="ani" onclick="aNav(6);aLoadSet()"><div class="ic">⚙️</div>ຕັ້ງຄ່າ</div>
@@ -685,8 +710,8 @@ input:checked+.sldr::before{transform:translateX(18px);}
       <div style="font-size:17px;font-weight:700;color:var(--p);margin-bottom:6px">ມີ Order ໃໝ່!</div>
       <div id="nlist" style="max-height:170px;overflow-y:auto;margin:9px 0;text-align:left"></div>
       <div style="display:flex;gap:7px;flex-direction:column">
-        <button class="btn btn-p" style="width:100%;padding:10px" onclick="aViewN()">📋 ໄປ Order</button>
-        <button class="btn btn-gh" style="width:100%;padding:8px;font-size:12px" onclick="aSnooze()">🔕 ຊ່ວຍຄາວ 5 ນາທີ</button>
+        <button class="btn btn-p" style="width:100%;padding:10px" onclick="aViewN()">📋 ໄປໜ້າອໍເດີ</button>
+        <button class="btn btn-gh" style="width:100%;padding:8px;font-size:12px" onclick="aSnooze()">🔕 ປິດຊົ່ວຄາວ 5 ນາທີ</button>
       </div>
     </div>
   </div>
@@ -697,28 +722,28 @@ input:checked+.sldr::before{transform:translateX(18px);}
       <div class="mhdr"><div class="mttl" id="a-stkmt">ສິນຄ້າ</div><button class="xcl" onclick="aMClose('a-stkm')">✕</button></div>
       <div style="text-align:center;margin-bottom:9px"><img id="a-mi" src="" style="width:84px;height:84px;object-fit:cover;border-radius:9px;border:3px solid var(--p);background:#f0f0f0"></div>
       <div class="mtabs">
-        <button id="mt-e" class="mtab on" onclick="aStkT('e')">✏️ ແກ້</button>
-        <button id="mt-a" class="mtab" onclick="aStkT('a')">➕ ເຕີມ</button>
-        <button id="mt-d" class="mtab" onclick="aStkT('d')">🗑️ ລົບ</button>
+        <button id="mt-e" class="mtab on" onclick="aStkT('e')">✏️ ແກ້ໄຂ</button>
+        <button id="mt-a" class="mtab" onclick="aStkT('a')">➕ ເຕີມສະຕ໋ອກ</button>
+        <button id="mt-d" class="mtab" onclick="aStkT('d')">🗑️ ລຶບ</button>
       </div>
       <div id="mt-ec">
         <div class="frow"><div class="fg"><label>ຊື່</label><input type="text" id="m-nm"></div><div class="fg"><label>ຈຳ</label><input type="number" id="m-qt"></div></div>
         <div class="frow"><div class="fg"><label>ທຶນ</label><input type="number" id="m-cs"></div><div class="fg"><label>ຂາຍ</label><input type="number" id="m-pr"></div></div>
         <div class="fg"><label>ຮູບ</label><div style="display:flex;gap:5px"><input type="url" id="m-im" style="flex:1"><button onclick="aPMImg()" class="btn btn-gh btn-sm">👁️</button></div></div>
-        <button class="btn btn-p" style="width:100%;margin-top:6px" onclick="aStkES()">💾 ບັນທຶກ</button>
+        <button class="btn btn-p" style="width:100%;margin-top:6px" onclick="aStkES()">💾 ບັນທຶກການແກ້ໄຂ</button>
       </div>
       <div id="mt-ac" style="display:none">
         <div style="background:rgba(var(--p3),.07);border-radius:8px;padding:9px;margin-bottom:9px;font-size:12px">ສິນຄ້າ: <b id="m-an"></b> · ຄົງ: <b id="m-aq" style="color:var(--p)"></b></div>
-        <div class="fg"><label>ຈຳນວນ</label><input type="number" id="m-aqa" value="1" min="1"></div>
-        <button class="btn btn-ok" style="width:100%" onclick="aStkAS()">➕ ເຕີມ</button>
+        <div class="fg"><label>ຈຳນວນທີ່ຈະເຕີມ</label><input type="number" id="m-aqa" value="1" min="1"></div>
+        <button class="btn btn-ok" style="width:100%" onclick="aStkAS()">➕ ເຕີມສະຕ໋ອກ</button>
       </div>
       <div id="mt-dc" style="display:none">
         <div style="background:rgba(231,76,60,.06);border:1.5px solid var(--d);border-radius:8px;padding:12px;text-align:center;margin-bottom:11px">
           <div style="font-size:20px">⚠️</div>
-          <div style="font-weight:700;color:var(--d);margin-top:4px">ລຶບ: <span id="m-dn"></span>?</div>
+          <div style="font-weight:700;color:var(--d);margin-top:4px">ຢືນຢັນລຶບ: <span id="m-dn"></span>?</div>
         </div>
         <div style="display:flex;gap:7px">
-          <button class="btn btn-gh" style="flex:1" onclick="aMClose('a-stkm')">ຍົກ</button>
+          <button class="btn btn-gh" style="flex:1" onclick="aMClose('a-stkm')">ຍົກເລີກ</button>
           <button class="btn btn-dg" style="flex:1" onclick="aStkDS()">🗑️ ລຶບ</button>
         </div>
       </div>
@@ -740,6 +765,23 @@ input:checked+.sldr::before{transform:translateX(18px);}
     </div>
   </div>
 </div><!-- end #apa -->
+
+<!-- Success Popup -->
+<div class="spov" id="spov" onclick="spClose(event)">
+  <div class="spbox" id="spbox">
+    <div class="sphead" id="sphead">
+      <div class="sp-confetti" id="sp-confetti"></div>
+      <span class="sphead-icon" id="sp-icon">✅</span>
+      <div class="sphead-title" id="sp-title">ສຳເລັດ!</div>
+      <div class="sphead-sub"  id="sp-sub"></div>
+    </div>
+    <div class="spbody" id="sp-body"></div>
+    <div class="spfoot">
+      <button class="sp-close" onclick="spHide()">ປິດ</button>
+      <button class="sp-ok"   id="sp-ok-btn" onclick="spHide()">ຕົກລົງ</button>
+    </div>
+  </div>
+</div>
 
 <!-- Dialog -->
 <div class="dov" id="dov">
@@ -807,7 +849,19 @@ const p2=n=>String(n).padStart(2,"0");
 function gid(u){if(!u)return"";const m1=String(u).match(/\/d\/([a-zA-Z0-9_-]{10,})/);if(m1)return m1[1];const m2=String(u).match(/[?&]id=([a-zA-Z0-9_-]{10,})/);if(m2)return m2[1];return"";}
 function gimg(u){if(!u)return"";const id=gid(u);return id?"https://lh3.googleusercontent.com/d/"+id:u;}
 function gthumb(u,s=400){const id=gid(u);return id?`https://drive.google.com/thumbnail?id=${id}&sz=w${s}`:(u||"");}
-function toYMD(r){if(!r)return"";const s=String(r);const m1=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m1)return`${m1[1]}-${m1[2]}-${m1[3]}`;const m2=s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);if(m2)return`${m2[3]}-${m2[2]}-${m2[1]}`;return s.slice(0,10);}
+function toYMD(r){
+  if(!r)return"";
+  const s=String(r);
+  // ISO full datetime: 2026-06-27T21:41:09.000Z
+  const m0=s.match(/^(\d{4})-(\d{2})-(\d{2})T/);if(m0)return`${m0[1]}-${m0[2]}-${m0[3]}`;
+  // ISO date only: 2026-06-27
+  const m1=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m1)return`${m1[1]}-${m1[2]}-${m1[3]}`;
+  // DD/MM/YYYY: 27/06/2026
+  const m2=s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);if(m2)return`${m2[3]}-${m2[2]}-${m2[1]}`;
+  // D/M/YYYY: 7/6/2026
+  const m3=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);if(m3)return`${m3[3]}-${p2(m3[2])}-${p2(m3[1])}`;
+  return s.slice(0,10);
+}
 function fmtD(r){const y=toYMD(r);if(!y)return String(r||"");const p=y.split("-");return`${p[2]}/${p[1]}/${p[0]}`;}
 function todY(){const n=new Date();return`${n.getFullYear()}-${p2(n.getMonth()+1)}-${p2(n.getDate())}`;}
 
@@ -1209,16 +1263,31 @@ async function aUpdSt(code,ns,btnEl){
   try{
     await api({action:"updateOrderStatus",code,status:ns});
     if(willAcc&&ord){
-      try{const its=aPrsItems(ord.itemsSummary||"");if(its.length)await api({action:"recordBulkSale",cart:its.map(i=>({name:i.name,qty:i.qty,price:i.price,discount:0,note:"",customerName:ord.customerName||"",customerPhone:ord.customerPhone||"",customerAddr:ord.customerAddr||"",shipping:ord.shipping||"",payment:ord.payment||"",orderCode:code}))});toast("ok","ຮັບ+ຕັດ","#"+code);aRemPN(code);}catch(e2){toast("warn","ຮັບ✓ ຕັດ✗",e2.message);}
-    }else toast("ok","ອັບ","#"+code+" → "+ns);
+      try{
+        const its=aPrsItems(ord.itemsSummary||"");
+        if(its.length)await api({action:"recordBulkSale",cart:its.map(i=>({name:i.name,qty:i.qty,price:i.price,discount:0,note:"",customerName:ord.customerName||"",customerPhone:ord.customerPhone||"",customerAddr:ord.customerAddr||"",shipping:ord.shipping||"",payment:ord.payment||"",orderCode:code}))});
+        aRemPN(code);
+        const itemSum=its.map(i=>i.name+"×"+i.qty).join(", ");
+        spAcceptOrder(code, ord.customerName, ord.totalAmount, itemSum);
+      }catch(e2){toast("warn","ຮັບ✓ ຕັດ✗",e2.message);}
+    } else {
+      spOrderStatus(code, ns);
+    }
     const i=aOrds.findIndex(o=>o.code===code);if(i>=0)aOrds[i].orderStatus=ns;aFiltOrd();
   }catch(e){toast("err","ຜິດ",e.message);}
   finally{if(btnEl)btnEl.disabled=false;}
 }
 function aPrsItems(s){const its=[];String(s).split(/\n/).forEach(l=>{const m=l.trim().match(/^(.+?)\s*[×xX](\d+)\s*\(([\d,.\s]+)/);if(m){const pr=parseInt(m[3].replace(/[,.\s]/g,""))||0;const q=parseInt(m[2])||1;if(m[1].trim()&&q>0&&pr>0)its.push({name:m[1].trim(),qty:q,price:pr});}});return its;}
-async function aDelOrd(code){if(!await dlgC("ລຶບ","ລຶບ #"+code+"?","🗑️"))return;try{await api({action:"deleteOrder",code});toast("ok","ລຶບ","#"+code);aOrds=aOrds.filter(o=>o.code!==code);aFiltOrd();}catch(e){toast("err","ຜິດ",e.message);}}
+async function aDelOrd(code){
+  if(!await dlgC("ລຶບ","ລຶບ #"+code+"?","🗑️"))return;
+  try{
+    await api({action:"deleteOrder",code});
+    aOrds=aOrds.filter(o=>o.code!==code);aFiltOrd();
+    spDelOrder(code);
+  }catch(e){toast("err","ຜິດ",e.message);}
+}
 function aViewImg(url,t){document.getElementById("a-imgmt").textContent=t;document.getElementById("a-imgsrc").src=gthumb(url,800)||url;document.getElementById("a-imglink").href=url;aMOpen("a-imgm");}
-(()=>{let _c="";document.addEventListener("click",e=>{const b=e.target.closest(".upbb[data-code]");if(!b)return;_c=b.getAttribute("data-code")||"";if(_c)document.getElementById("shipf").click();});document.getElementById("shipf").addEventListener("change",function(){const f=this.files[0];if(!f||!_c)return;const code=_c;this.value="";toast("info","ກຳລັງອັບ...","");const r=new FileReader();r.onload=async ev=>{try{const res=await api({action:"uploadShippingBill",code,shipBillBase64:ev.target.result});toast("ok","ອັບ!","");setTimeout(aLoadOrders,800);}catch(e){toast("err","ຜິດ",e.message);};};r.readAsDataURL(f);});})();
+(()=>{let _c="";document.addEventListener("click",e=>{const b=e.target.closest(".upbb[data-code]");if(!b)return;_c=b.getAttribute("data-code")||"";if(_c)document.getElementById("shipf").click();});document.getElementById("shipf").addEventListener("change",function(){const f=this.files[0];if(!f||!_c)return;const code=_c;this.value="";toast("info","ກຳລັງອັບ...","");const r=new FileReader();r.onload=async ev=>{try{await api({action:"uploadShippingBill",code,shipBillBase64:ev.target.result});spUploadBill(code);}catch(e){toast("err","ຜິດ",e.message);};};r.readAsDataURL(f);});})();
 function aPrintOrd(code){const o=aOrds.find(x=>x.code===code);if(!o)return;const w=window.open("","_blank","width=370,height=580");w.document.write(`<html><body style="font-family:monospace;font-size:12px;padding:12px"><div style="text-align:center;font-weight:700;font-size:14px;margin-bottom:8px">${lsGet().shopName||CFG.shopName}</div><hr><div>ລະຫັດ: <b>${o.code}</b></div><div>ວັນ: ${o.submittedAt||""}</div><div>👤 ${o.customerName||""} 📞 ${o.customerPhone||""}</div><div>📍 ${o.customerAddr||""}</div><div>🚚 ${o.shipping||""} 💳 ${o.payment||""}</div><hr><div style="white-space:pre-line">${o.itemsSummary||""}</div><hr><b>ລວມ: ${fN(o.totalAmount||0)} ₭</b><div style="text-align:center;margin-top:8px;font-size:10px">ຂອບໃຈ 🙏</div></body></html>`);w.document.close();w.print();}
 function aPrintAll(){const d=aOrds.filter(o=>{const dt=document.getElementById("a-odate").value;if(!dt)return true;const t=String(o.submittedAt||"");const m=t.match(/(\d{2})\/(\d{2})\/(\d{4})/);return m?`${m[3]}-${m[2]}-${m[1]}`===dt:t.startsWith(dt);});if(!d.length){toast("warn","ບໍ່ມີ");return;}const tot=d.reduce((s,o)=>s+(Number(o.totalAmount)||0),0);const w=window.open("","_blank","width=400,height=700");w.document.write(`<html><body style="font-family:monospace;font-size:12px"><div style="text-align:center;font-size:14px;font-weight:700;padding:12px;border-bottom:2px solid #333">${lsGet().shopName||CFG.shopName}<br>${d.length} ໃບ · ${fN(tot)} ₭</div>${d.map(o=>`<div style="padding:11px;border-bottom:1px dashed #ccc"><b>#${o.code}</b> ${o.submittedAt||""}<br>👤 ${o.customerName||""} 📞 ${o.customerPhone||""}<br>💰 ${fN(o.totalAmount||0)} ₭ · ${o.orderStatus||""}</div>`).join("")}</body></html>`);w.document.close();setTimeout(()=>w.print(),400);}
 
@@ -1240,11 +1309,46 @@ function aStkM(name,cost,price,qty,imgE,tab){
 }
 function aStkT(t){["e","a","d"].forEach(k=>{document.getElementById("mt-"+k+"c").style.display=k===t?"block":"none";document.getElementById("mt-"+k).classList.toggle("on",k===t);});}
 function aPMImg(){const u=document.getElementById("m-im").value.trim();if(u)document.getElementById("a-mi").src=gimg(u);}
-async function aStkES(){const pl={action:"editProductFull",oldName:aCurEN,newName:document.getElementById("m-nm").value.trim(),cost:document.getElementById("m-cs").value,price:document.getElementById("m-pr").value,qty:document.getElementById("m-qt").value,imgUrl:document.getElementById("m-im").value.trim()};try{const r=await api(pl);toast("ok","ສຳ",r.message);aMClose("a-stkm");aLoadStk();}catch(e){toast("err","ຜິດ",e.message);}}
-async function aStkAS(){const q=document.getElementById("m-aqa").value;if(!q||Number(q)<=0){toast("warn","ໃສ່ຈຳ");return;}try{const r=await api({action:"quickAddStock",name:aCurEN,qty:q});toast("ok","ສຳ",r.message);aMClose("a-stkm");aLoadStk();}catch(e){toast("err","ຜິດ",e.message);}}
-async function aStkDS(){try{const r=await api({action:"deleteProduct",name:aCurEN});toast("ok","ລຶບ",r.message);aMClose("a-stkm");aLoadStk();}catch(e){toast("err","ຜິດ",e.message);}}
+async function aStkES(){
+  const pl={action:"editProductFull",oldName:aCurEN,newName:document.getElementById("m-nm").value.trim(),cost:document.getElementById("m-cs").value,price:document.getElementById("m-pr").value,qty:document.getElementById("m-qt").value,imgUrl:document.getElementById("m-im").value.trim()};
+  try{
+    await api(pl);
+    aMClose("a-stkm");
+    spEditProduct(pl.newName||aCurEN);
+  }catch(e){toast("err","ຜິດ",e.message);}
+}
+async function aStkAS(){
+  const q=document.getElementById("m-aqa").value;
+  if(!q||Number(q)<=0){toast("warn","ໃສ່ຈຳ");return;}
+  try{
+    const r=await api({action:"quickAddStock",name:aCurEN,qty:q});
+    aMClose("a-stkm");
+    // Extract new qty from message
+    const newQty=(r.message||"").match(/ຄົງ (\d+)/);
+    spAddStock(aCurEN, q, newQty?newQty[1]:"-");
+  }catch(e){toast("err","ຜິດ",e.message);}
+}
+async function aStkDS(){
+  try{
+    await api({action:"deleteProduct",name:aCurEN});
+    aMClose("a-stkm");
+    spDelProduct(aCurEN);
+  }catch(e){toast("err","ຜິດ",e.message);}
+}
 function aPrevImg(){const u=document.getElementById("p-img").value.trim();if(!u){toast("warn","ໃສ່ URL");return;}document.getElementById("p-imgt").src=gimg(u);document.getElementById("p-imgprev").style.display="block";}
-async function aSaveP(){const n=document.getElementById("p-name").value.trim();const q=document.getElementById("p-qty").value;if(!n||!q){toast("warn","ໃສ່ຊື່ ແລະ ຈຳ!");return;}try{const r=await api({action:"saveProduct",name:n,cost:document.getElementById("p-cost").value,price:document.getElementById("p-price").value,qty:q,imgUrl:document.getElementById("p-img").value.trim()});toast("ok","ສຳ",r.message);["p-name","p-cost","p-price","p-qty","p-img"].forEach(id=>document.getElementById(id).value="");document.getElementById("p-imgprev").style.display="none";aLoadStk();}catch(e){toast("err","ຜິດ",e.message);}}
+async function aSaveP(){
+  const n=document.getElementById("p-name").value.trim();
+  const q=document.getElementById("p-qty").value;
+  const c=document.getElementById("p-cost").value;
+  const pr=document.getElementById("p-price").value;
+  if(!n||!q){toast("warn","ໃສ່ຊື່ ແລະ ຈຳ!");return;}
+  try{
+    await api({action:"saveProduct",name:n,cost:c,price:pr,qty:q,imgUrl:document.getElementById("p-img").value.trim()});
+    ["p-name","p-cost","p-price","p-qty","p-img"].forEach(id=>document.getElementById(id).value="");
+    document.getElementById("p-imgprev").style.display="none";
+    spSaveProduct(n, q, c, pr);
+  }catch(e){toast("err","ຜິດ: "+e.message);}
+}
 
 // POS
 let posProds=[],posCart=[],posSel=null;
@@ -1280,7 +1384,17 @@ function posRenCart(){
   document.getElementById("pos-clist").innerHTML=posCart.map((it,i)=>{const s=it.qty*it.price-it.discount;tot+=s;return`<div class="pos-cart-item" style="display:flex;justify-content:space-between;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--br);font-size:11px"><div><b>${it.name}</b><br><small style="color:var(--sub)">${it.qty}×${fN(it.price)}${it.discount?" -"+it.discount:""}</small></div><div style="display:flex;align-items:center;gap:4px"><b style="color:var(--p)">${fN(s)}₭</b><button onclick="posCart.splice(${i},1);posRenCart()" style="background:none;border:none;color:var(--d);cursor:pointer;font-size:13px">✕</button></div></div>`;}).join("");
   document.getElementById("pos-ctot").textContent=fN(tot);
 }
-async function posSub(){if(!posCart.length){toast("warn","ຍັງບໍ່ມີ");return;}try{const r=await api({action:"recordBulkSale",cart:posCart});toast("ok","ສຳ",r.message);posCart=[];posRenCart();posLoad();aDash();}catch(e){toast("err","ຜິດ",e.message);}}
+async function posSub(){
+  if(!posCart.length){toast("warn","ຍັງບໍ່ມີ");return;}
+  try{
+    await api({action:"recordBulkSale",cart:posCart});
+    const tot=posCart.reduce((s,i)=>s+i.qty*i.price-i.discount,0);
+    const custName=posCart[0]?.customerName||"";
+    const items=[...posCart];
+    posCart=[];posRenCart();
+    spPOSSale(items, tot, custName);
+  }catch(e){toast("err","ຜິດ",e.message);}
+}
 function posPrint(){if(!posCart.length)return;let rows="",tot=0;posCart.forEach(it=>{const s=it.qty*it.price-it.discount;tot+=s;rows+=`<tr><td>${it.name}</td><td>${it.qty}</td><td>${fN(s)}</td></tr>`;});const w=window.open("","_blank","width=350,height=540");w.document.write(`<html><body style="font-family:monospace;font-size:12px;padding:11px"><div style="text-align:center;font-weight:700">${lsGet().shopName||CFG.shopName}</div><hr><table width="100%"><tr><th>ສິນຄ້າ</th><th>ຈຳ</th><th>₭</th></tr>${rows}</table><hr><b>ລວມ: ${fN(tot)} ₭</b><div style="text-align:center;font-size:10px;margin-top:8px">ຂອບໃຈ 🙏</div></body></html>`);w.document.close();w.print();}
 
 // REPORTS
@@ -1316,7 +1430,24 @@ async function aHSD(r){if(!await dlgC("ລຶບ","ລຶບ?","🗑️"))return
 function aLoadSet(){const s=lsGet();document.getElementById("set-nm").value=s.shopName||CFG.shopName;document.getElementById("set-logo").value=s.logoUrl||CFG.logoUrl;document.getElementById("set-qr").value=s.qrUrl||CFG.qrUrl||"";document.getElementById("set-pwd").value=s.adminPwd||CFG.adminPwd;document.getElementById("set-col").value=s.primaryColor||CFG.primaryColor;document.getElementById("set-dk").checked=!!s.dark;aLoadBanner();}
 async function aLoadBanner(){try{const d=await apiG("getBannerSettings");document.getElementById("set-tick").value=d.tickerText||"";}catch{}}
 async function aSaveBanner(){const t=(document.getElementById("set-tick").value||"").trim();if(!t){toast("warn","ໃສ່ຂໍ້ຄວາມ");return;}try{await api({action:"saveBannerSettings",settings:{tickerText:t}});toast("ok","Save Ticker!");}catch(e){toast("err","ຜິດ",e.message);}}
-function aSaveSet(){const s=lsGet();s.shopName=document.getElementById("set-nm").value.trim();s.logoUrl=document.getElementById("set-logo").value.trim();s.qrUrl=document.getElementById("set-qr").value.trim();s.adminPwd=document.getElementById("set-pwd").value.trim();s.primaryColor=document.getElementById("set-col").value;s.dark=document.getElementById("set-dk").checked;lsSave(s);applyCol(s.primaryColor);if(s.dark)document.documentElement.setAttribute("data-dk","1");else document.documentElement.removeAttribute("data-dk");const n=s.shopName;["c-shopname","a-sn","ll-name","c-bill-sn"].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=n;});const l=s.logoUrl;["c-logo","a-logo","ll-logo"].forEach(id=>{const e=document.getElementById(id);if(e)e.src=l;});toast("ok","ບັນທຶກ!");}
+function aSaveSet(){
+  const s=lsGet();
+  s.shopName=document.getElementById("set-nm").value.trim();
+  s.logoUrl=document.getElementById("set-logo").value.trim();
+  s.qrUrl=document.getElementById("set-qr").value.trim();
+  s.adminPwd=document.getElementById("set-pwd").value.trim();
+  s.primaryColor=document.getElementById("set-col").value;
+  s.dark=document.getElementById("set-dk").checked;
+  lsSave(s);
+  applyCol(s.primaryColor);
+  if(s.dark)document.documentElement.setAttribute("data-dk","1");
+  else document.documentElement.removeAttribute("data-dk");
+  const n=s.shopName;
+  ["c-shopname","a-sn","ll-name","c-bill-sn"].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=n;});
+  const l=s.logoUrl;
+  ["c-logo","a-logo","ll-logo"].forEach(id=>{const e=document.getElementById(id);if(e)e.src=l;});
+  spSaveSettings(n);
+}
 function aApplyCol(c){applyCol(c);document.getElementById("set-col").value=c;}
 function aDark(on){if(on)document.documentElement.setAttribute("data-dk","1");else document.documentElement.removeAttribute("data-dk");}
 
@@ -1331,7 +1462,198 @@ function aRemPN(code){aPendN=aPendN.filter(o=>o.code!==code);aRenN();}
 function aViewN(){document.getElementById("nov").classList.remove("on");aNav(1);aLoadOrders();}
 function aSnooze(){aSnoozT=Date.now()+5*60*1000;aRenN();toast("info","ຊ່ວຍ 5 ນາທີ","");setTimeout(()=>{if(aPendN.length){aSnoozT=0;aRenN();aPlayS();}},5*60*1000);}
 function aReopenN(){aSnoozT=0;aRenN();}
-function aPlayS(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();[523,659,784].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(.2,ctx.currentTime+i*.15);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+i*.15+.2);o.start(ctx.currentTime+i*.15);o.stop(ctx.currentTime+i*.15+.25);});}catch{}}
+function aPlayS(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();[523,659,784].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(.2,ctx.currentTime+i*.15);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+i*.15+.2);o.start(ctx.currentTime+i*.15);o.stop(ctx.currentTime+i*.15+.25);});}catch{}}// ================================================================
+// SUCCESS POPUP — ທຸລະກຳທຸກຊະນິດ
+// ================================================================
+const SP_THEMES = {
+  ok:    { bg:"linear-gradient(135deg,#27ae60,#2ecc71)", color:"#fff", icon:"✅" },
+  stock: { bg:"linear-gradient(135deg,#C2185B,#F48FB1)", color:"#fff", icon:"📦" },
+  add:   { bg:"linear-gradient(135deg,#3498db,#5dade2)", color:"#fff", icon:"➕" },
+  sale:  { bg:"linear-gradient(135deg,#f39c12,#f7dc6f)", color:"#333", icon:"💰" },
+  del:   { bg:"linear-gradient(135deg,#e74c3c,#ec7063)", color:"#fff", icon:"🗑️" },
+  order: { bg:"linear-gradient(135deg,#8e44ad,#a569bd)", color:"#fff", icon:"📋" },
+  edit:  { bg:"linear-gradient(135deg,#16a085,#1abc9c)", color:"#fff", icon:"✏️" },
+};
+
+function spShow(opts){
+  // opts: { type, title, sub, rows:[{icon,label,val,bg}], okText, onOk }
+  const th = SP_THEMES[opts.type||"ok"] || SP_THEMES.ok;
+  const head = document.getElementById("sphead");
+  const icon = document.getElementById("sp-icon");
+  const titleEl = document.getElementById("sp-title");
+  const subEl   = document.getElementById("sp-sub");
+  const bodyEl  = document.getElementById("sp-body");
+  const okBtn   = document.getElementById("sp-ok-btn");
+  const confEl  = document.getElementById("sp-confetti");
+
+  head.style.background = th.bg;
+  head.style.color = th.color;
+  icon.textContent  = opts.icon || th.icon;
+  titleEl.textContent = opts.title || "ສຳເລັດ!";
+  subEl.textContent   = opts.sub   || "";
+  okBtn.textContent   = opts.okText || "ຕົກລົງ";
+  okBtn.style.background = th.bg.includes("linear") ? th.bg : ("var(--p)");
+
+  // Rows
+  bodyEl.innerHTML = (opts.rows||[]).map(r=>`
+    <div class="sprow" style="background:${r.bg||"rgba(0,0,0,.04)"}">
+      <div class="sprow-icon" style="background:${r.iconBg||"rgba(0,0,0,.08)"}">${r.icon||"📌"}</div>
+      <div><div class="sprow-label">${r.label||""}</div><div class="sprow-val" style="color:${r.valColor||"var(--tx)"}">${r.val||"-"}</div></div>
+    </div>`).join("");
+
+  // Confetti
+  confEl.innerHTML = "";
+  if(opts.type !== "del"){
+    const colors=["#FFD700","#FF69B4","#00CED1","#FF6347","#ADFF2F","#FFA500","#FF1493"];
+    for(let i=0;i<14;i++){
+      const d=document.createElement("div");
+      d.className="sp-dot";
+      d.style.cssText=`left:${5+Math.random()*90}%;top:${60+Math.random()*40}%;background:${colors[i%colors.length]};animation-delay:${Math.random()*.5}s;animation-duration:${.8+Math.random()*.6}s;width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;`;
+      confEl.appendChild(d);
+    }
+  }
+
+  // Callback
+  window._spOnOk = opts.onOk || null;
+
+  document.getElementById("spov").classList.add("on");
+  document.body.style.overflow = "hidden";
+}
+
+function spHide(){
+  document.getElementById("spov").classList.remove("on");
+  document.body.style.overflow = "";
+  if(window._spOnOk){ window._spOnOk(); window._spOnOk=null; }
+}
+
+function spClose(e){
+  if(e.target===document.getElementById("spov")) spHide();
+}
+
+// ── ຄ່ານິຍາມ Popup ສຳຫຼັບແຕ່ລະທຸລະກຳ ──
+
+// 1. ເພີ່ມສິນຄ້າໃໝ່
+function spSaveProduct(name, qty, cost, price){
+  spShow({
+    type:"add", title:"ເພີ່ມສິນຄ້າສຳເລັດ!", sub:"ສິນຄ້າໄດ້ຖືກເພີ່ມໃນຄັງແລ້ວ",
+    rows:[
+      {icon:"🏷️", label:"ຊື່ສິນຄ້າ",   val:name,                    bg:"rgba(52,152,219,.07)",   iconBg:"rgba(52,152,219,.15)"},
+      {icon:"📦", label:"ຈຳນວນ",       val:Number(qty).toLocaleString()+" ຊິ້ນ", bg:"rgba(39,174,96,.07)",  iconBg:"rgba(39,174,96,.15)", valColor:"var(--g)"},
+      {icon:"💸", label:"ລາຄາທຶນ",     val:fN(Number(cost))+" ₭",   bg:"rgba(231,76,60,.06)",   iconBg:"rgba(231,76,60,.12)"},
+      {icon:"💰", label:"ລາຄາຂາຍ",     val:fN(Number(price))+" ₭",  bg:"rgba(var(--p3),.07)",   iconBg:"rgba(var(--p3),.15)", valColor:"var(--p)"},
+    ],
+    okText:"✅ ດີ!", onOk:()=>{ aLoadStk(); }
+  });
+}
+
+// 2. ເຕີມສະຕ໋ອກ
+function spAddStock(name, addQty, newQty){
+  spShow({
+    type:"stock", title:"ເຕີມສະຕ໋ອກສຳເລັດ!", sub:"ສະຕ໋ອກໄດ້ຮັບການອັບເດດ",
+    rows:[
+      {icon:"🏷️", label:"ສິນຄ້າ",         val:name,                              bg:"rgba(var(--p3),.06)",  iconBg:"rgba(var(--p3),.14)"},
+      {icon:"➕", label:"ຈຳນວນທີ່ເຕີມ",   val:"+"+Number(addQty).toLocaleString()+" ຊິ້ນ", bg:"rgba(39,174,96,.07)", iconBg:"rgba(39,174,96,.15)", valColor:"var(--g)"},
+      {icon:"📦", label:"ຄົງຄັງໃໝ່",      val:Number(newQty).toLocaleString()+" ຊິ້ນ",    bg:"rgba(52,152,219,.07)", iconBg:"rgba(52,152,219,.15)", valColor:"var(--b)"},
+    ],
+    okText:"✅ ດີ!", onOk:()=>{ aLoadStk(); }
+  });
+}
+
+// 3. ແກ້ໄຂສິນຄ້າ
+function spEditProduct(name){
+  spShow({
+    type:"edit", title:"ແກ້ໄຂສຳເລັດ!", sub:"ຂໍ້ມູນ "+name+" ໄດ້ຖືກອັບເດດ",
+    rows:[
+      {icon:"✏️", label:"ສິນຄ້າ", val:name, bg:"rgba(22,160,133,.07)", iconBg:"rgba(22,160,133,.15)"},
+    ],
+    okText:"✅ ດີ!", onOk:()=>{ aLoadStk(); }
+  });
+}
+
+// 4. ລຶບສິນຄ້າ
+function spDelProduct(name){
+  spShow({
+    type:"del", title:"ລຶບສຳເລັດ!", sub:name+" ໄດ້ຖືກລຶບອອກຈາກລະບົບ",
+    rows:[
+      {icon:"🗑️", label:"ສິນຄ້າທີ່ລຶບ", val:name, bg:"rgba(231,76,60,.07)", iconBg:"rgba(231,76,60,.15)", valColor:"var(--d)"},
+    ],
+    icon:"🗑️", okText:"ຕົກລົງ", onOk:()=>{ aLoadStk(); }
+  });
+}
+
+// 5. ບັນທຶກການຂາຍ POS
+function spPOSSale(items, total, custName){
+  spShow({
+    type:"sale", title:"ບັນທຶກການຂາຍສຳເລັດ!", sub:custName?"👤 "+custName:"ຂາຍໜ້າຮ້ານ",
+    rows:[
+      {icon:"🛍️", label:"ລາຍການ", val:items.map(i=>i.name+"×"+i.qty).join(", "), bg:"rgba(243,156,18,.08)", iconBg:"rgba(243,156,18,.18)"},
+      {icon:"💰", label:"ຍອດລວມ", val:fN(total)+" ₭", bg:"rgba(39,174,96,.08)", iconBg:"rgba(39,174,96,.18)", valColor:"var(--g)"},
+    ],
+    okText:"✅ ດີ!", onOk:()=>{ posLoad(); aDash(); }
+  });
+}
+
+// 6. ຮັບຍອດ Order
+function spAcceptOrder(code, custName, total, items){
+  spShow({
+    type:"order", title:"ຮັບຍອດ Order ສຳເລັດ!", sub:"ຕັດສະຕ໋ອກ ແລະ ບັນທຶກການຂາຍແລ້ວ",
+    rows:[
+      {icon:"📋", label:"ລະຫັດ Order", val:"#"+code,   bg:"rgba(142,68,173,.07)",  iconBg:"rgba(142,68,173,.15)", valColor:"#8e44ad"},
+      {icon:"👤", label:"ລູກຄ້າ",      val:custName||"-", bg:"rgba(52,152,219,.06)", iconBg:"rgba(52,152,219,.12)"},
+      {icon:"🛍️", label:"ສິນຄ້າ",      val:items||"-",  bg:"rgba(var(--p3),.05)",  iconBg:"rgba(var(--p3),.12)"},
+      {icon:"💰", label:"ມູນຄ່າ",       val:fN(total)+" ₭", bg:"rgba(39,174,96,.07)", iconBg:"rgba(39,174,96,.15)", valColor:"var(--g)"},
+    ],
+    okText:"✅ ດີ!"
+  });
+}
+
+// 7. ອັບສະຖານະ Order ທົ່ວໄປ
+function spOrderStatus(code, status){
+  const icons={"ລໍຖ້າຮັບຍອດ":"⏳","ແມ່ຄ້າຮັບຍອດແລ້ວ":"✅","ກຳລັງກຽມການຈັດສົ່ງ":"📦","ຈັດສົ່ງສຳເລັດ":"🎉"};
+  spShow({
+    type:"order", title:"ອັບເດດສຳເລັດ!", sub:"Order "+code+" ໄດ້ຖືກອັບເດດ",
+    icon: icons[status]||"📋",
+    rows:[
+      {icon:"📋", label:"ລະຫັດ",     val:"#"+code,  bg:"rgba(142,68,173,.07)", iconBg:"rgba(142,68,173,.15)"},
+      {icon:icons[status]||"📌", label:"ສະຖານະໃໝ່", val:status, bg:"rgba(var(--p3),.06)", iconBg:"rgba(var(--p3),.14)", valColor:"var(--p)"},
+    ],
+    okText:"ດີ!"
+  });
+}
+
+// 8. ອັບໂຫຼດບິນຂົນສົ່ງ
+function spUploadBill(code){
+  spShow({
+    type:"ok", title:"ອັບໂຫຼດບິນສຳເລັດ!", sub:"ລູກຄ້າຈະເຫັນບິນໃນໜ້າກວດສະຖານະ",
+    rows:[
+      {icon:"📦", label:"Order",   val:"#"+code,    bg:"rgba(39,174,96,.07)",  iconBg:"rgba(39,174,96,.15)"},
+      {icon:"🖼️", label:"ສະຖານະ", val:"ອັບໂຫຼດແລ້ວ", bg:"rgba(52,152,219,.06)", iconBg:"rgba(52,152,219,.12)", valColor:"var(--b)"},
+    ],
+    okText:"✅ ດີ!", onOk:()=>{ aLoadOrders(); }
+  });
+}
+
+// 9. ລຶບ Order
+function spDelOrder(code){
+  spShow({
+    type:"del", title:"ລຶບ Order ສຳເລັດ!", sub:"Order #"+code+" ໄດ້ຖືກລຶບອອກ",
+    icon:"🗑️",
+    rows:[
+      {icon:"📋", label:"ລະຫັດ", val:"#"+code, bg:"rgba(231,76,60,.07)", iconBg:"rgba(231,76,60,.15)", valColor:"var(--d)"},
+    ],
+    okText:"ຕົກລົງ"
+  });
+}
+
+// 10. Save Settings
+function spSaveSettings(name){
+  spShow({
+    type:"ok", title:"ບັນທຶກຕັ້ງຄ່າສຳເລັດ!", sub:"ການຕັ້ງຄ່າໄດ້ຖືກບັນທຶກໃນໂທລະສັບ",
+    rows:[
+      {icon:"🏪", label:"ຊື່ຮ້ານ",   val:name,       bg:"rgba(var(--p3),.06)", iconBg:"rgba(var(--p3),.14)"},
+      {icon:"💾", label:"ສະຖານະ",    val:"ບັນທຶກແລ້ວ", bg:"rgba(39,174,96,.07)", iconBg:"rgba(39,174,96,.15)", valColor:"var(--g)"},
+    ],
+    okText:"✅ ດີ!"
+  });
+}
 </script>
-</body>
-</html>
