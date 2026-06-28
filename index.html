@@ -1301,7 +1301,25 @@ function aRenOrds(ords){
     const stbs=sd.map(s=>`<button class="stb ${s.c}${o.orderStatus===s.k?" cur":""}" onclick="aUpdSt('${code}','${s.k}',this)">${s.l}</button>`).join("");
     const slip=o.slipUrl?`<img class="sth" src="${gthumb(o.slipUrl,80)}" onclick="aViewImg('${o.slipUrl}','Slip')" onerror="this.style.display='none'">`:`<span style="font-size:15px">${o.slipStatus==="✅ ມີ"?"✅":"—"}</span>`;
     const bill=o.shippingBillUrl?`<img class="sth" src="${gthumb(o.shippingBillUrl,80)}" onclick="aViewImg('${o.shippingBillUrl}','ບິນ')" onerror="this.style.display='none'">`:`<button class="upbb" data-code="${code}">📤 ອັບ</button>`;
-    return`<div class="ocrd"><div class="ohdr" style="background:${isCOD?"rgba(52,152,219,.06)":"rgba(var(--p3),.06)"}"><div><div class="ocd">#${o.code||"-"}</div><div class="oti">🕐 ${o.submittedAt||"-"}</div><span class="bdg ${isCOD?"bdg-b":"bdg-s"}" style="margin-top:5px;display:inline-flex">${isCOD?"💵 COD":"💳 ໂອນ"}</span></div><span class="bdg ${o.orderStatus==="ຈັດສົ່ງສຳເລັດ"?"bdg-g":o.orderStatus==="ລໍຖ້າຮັບຍອດ"?"bdg-w":"bdg-b"}">${o.orderStatus||"?"}</span></div>${[["👤",o.customerName],["📞",o.customerPhone],["📍",o.customerAddr],["🚚",o.shipping],["💳",o.payment]].map(([l,v])=>`<div class="oir"><span class="olb">${l}</span><span>${v||"-"}</span></div>`).join("")}${o.note?`<div class="oir"><span class="olb">📝</span><span>${o.note}</span></div>`:""}<div class="oit">${String(o.itemsSummary||"-").replace(/\n/g,"<br>")}</div><div class="otr"><div style="display:flex;gap:9px;align-items:center"><div><div style="font-size:10px;color:var(--sub)">Slip</div><div style="margin-top:2px">${slip}</div></div><div><div style="font-size:10px;color:var(--sub)">ບິນ</div><div style="margin-top:2px">${bill}</div></div></div><div class="otamt">${fN(o.totalAmount||0)} ₭</div></div><div class="sbts">${stbs}</div><div style="display:flex;gap:5px"><button class="btn btn-dg btn-sm" style="flex:1" onclick="aDelOrd('${code}')">🗑️</button><button class="btn btn-gh btn-sm" style="flex:1" onclick="aPrintOrd('${code}')">🖨️</button></div></div>`;
+    const ph=String(o.customerPhone||"").replace(/\D/g,"");
+    // ແປງເບີໂທລາວທຸກ format → 856XXXXXXXX
+    let waNum="";
+    if(ph.startsWith("856"))      waNum=ph;           // 85620xxxxxxx
+    else if(ph.startsWith("0"))   waNum="856"+ph.slice(1); // 020xxxxxxx
+    else if(ph.length===8)        waNum="85620"+ph;   // 55360660 → 85620+55360660? No → 8562055360660
+    else if(ph.length===9)        waNum="856"+ph;     // 20xxxxxxx → 85620xxxxxxx (missing 0 prefix)
+    else if(ph.length===10)       waNum="856"+ph.slice(1); // 020xxxxxxx
+    else                          waNum="856"+ph;
+    // ກວດ: ເລກສ່ວນໃຫຍ່ຄວນເປັນ 856 20 xxxxxxx = 13 digits
+    // ຖ້າ 8 ຕົວ = ຂາດ 020 → ເຕີມ 85620
+    if(ph.length===8) waNum="85620"+ph;
+    const waLink=`https://wa.me/${waNum}`;
+    const waBtn=ph?`<a href="${waLink}" target="_blank" style="display:inline-flex;align-items:center;gap:4px;color:#25d366;font-weight:700;text-decoration:none;font-size:12px"><svg width="14" height="14" viewBox="0 0 175 175"><circle cx="87" cy="87" r="87" fill="#25d366"/><path fill="#fff" d="M127 110c-1.8 5-8.9 9.1-14.4 10.3-3.8.8-8.8.7-26.4-5.5-22.1-8-36.4-30.5-37.5-31.9-1.1-1.4-8.9-11.8-8.9-22.5 0-10.7 5.6-16 7.6-18.1 2-2.2 4.3-2.7 5.8-2.7 1.5 0 2.9 0 4.2.1 1.3.1 3.1-.5 4.9 3.8l6.7 17c.7 1.7.3 3.6-.7 5.1l-3 4.4c-1 1.4-.8 3 .2 4.3 3.7 5.2 9.9 12.4 17 16.7 7.1 4.4 12.9 5.7 14.9 6.4 2 .6 3.1.5 4.3-.8l5.3-6.4c1.3-1.6 2.5-1.3 4.2-.7l17.4 8.2c1.7.6 2.9 1.1 3.3 1.8.4.7.4 4.3-1.4 9.3z"/></svg>${o.customerPhone}</a>`:`—`;
+    return`<div class="ocrd"><div class="ohdr" style="background:${isCOD?"rgba(52,152,219,.06)":"rgba(var(--p3),.06)"}"><div><div class="ocd">#${o.code||"-"}</div><div class="oti">🕐 ${o.submittedAt||"-"}</div><span class="bdg ${isCOD?"bdg-b":"bdg-s"}" style="margin-top:5px;display:inline-flex">${isCOD?"💵 COD":"💳 ໂອນ"}</span></div><span class="bdg ${o.orderStatus==="ຈັດສົ່ງສຳເລັດ"?"bdg-g":o.orderStatus==="ລໍຖ້າຮັບຍອດ"?"bdg-w":"bdg-b"}">${o.orderStatus||"?"}</span></div>
+    <div class="oir"><span class="olb">👤</span><span>${o.customerName||"-"}</span></div>
+    <div class="oir"><span class="olb">📞</span>${waBtn}</div>
+    ${[["📍",o.customerAddr],["🚚",o.shipping],["💳",o.payment]].map(([l,v])=>`<div class="oir"><span class="olb">${l}</span><span>${v||"-"}</span></div>`).join("")}
+    ${o.note?`<div class="oir"><span class="olb">📝</span><span>${o.note}</span></div>`:""}<div class="oit">${String(o.itemsSummary||"-").replace(/\n/g,"<br>")}</div><div class="otr"><div style="display:flex;gap:9px;align-items:center"><div><div style="font-size:10px;color:var(--sub)">Slip</div><div style="margin-top:2px">${slip}</div></div><div><div style="font-size:10px;color:var(--sub)">ບິນ</div><div style="margin-top:2px">${bill}</div></div></div><div class="otamt">${fN(o.totalAmount||0)} ₭</div></div><div class="sbts">${stbs}</div><div style="display:flex;gap:5px"><button class="btn btn-dg btn-sm" style="flex:1" onclick="aDelOrd('${code}')">🗑️</button><button class="btn btn-gh btn-sm" style="flex:1" onclick="aPrintOrd('${code}')">🖨️</button></div></div>`;
   }).join("");
 }
 async function aUpdSt(code,ns,btnEl){
@@ -1502,17 +1520,106 @@ function aApplyCol(c){applyCol(c);document.getElementById("set-col").value=c;}
 function aDark(on){if(on)document.documentElement.setAttribute("data-dk","1");else document.documentElement.removeAttribute("data-dk");}
 
 // NOTIF POLLING
-let aPollTmr=null,aPendN=[],aSnoozT=0;
+let aPollTmr=null,aPendN=[],aSnoozT=0,aSoundLoop=null;
 const aKnown=new Set();
+
 function aInitPoll(){aFetchN(true);clearInterval(aPollTmr);aPollTmr=setInterval(()=>aFetchN(false),30000);}
-async function aFetchN(isInit){try{const res=await api({action:"getAllOrders"});const ords=Array.isArray(res)?res:(res.data||[]);if(isInit){ords.forEach(o=>{if(o.code)aKnown.add(o.code);});return;}ords.forEach(o=>{if(!o.code||aKnown.has(o.code))return;aKnown.add(o.code);aShowN(o);});}catch{}}
-function aShowN(o){if(!aPendN.find(x=>x.code===o.code))aPendN.push(o);aRenN();aPlayS();}
-function aRenN(){if(!aPendN.length){document.getElementById("nov").classList.remove("on");document.getElementById("nbd").classList.remove("on");return;}if(Date.now()<aSnoozT){document.getElementById("nov").classList.remove("on");const b=document.getElementById("nbd");b.classList.add("on");document.getElementById("ncnt").textContent=aPendN.length;return;}document.getElementById("nov").classList.add("on");document.getElementById("nbd").classList.remove("on");document.getElementById("nlist").innerHTML=aPendN.map(o=>`<div style="background:rgba(var(--p3),.06);border:1px solid rgba(var(--p3),.2);border-radius:7px;padding:7px 9px;margin-bottom:5px"><b style="color:var(--p)">#${o.code||"-"}</b><br><small>👤 ${o.customerName||"-"} · ${fN(o.totalAmount||0)} ₭</small></div>`).join("");}
-function aRemPN(code){aPendN=aPendN.filter(o=>o.code!==code);aRenN();}
+
+async function aFetchN(isInit){
+  try{
+    const res=await api({action:"getAllOrders"});
+    const ords=Array.isArray(res)?res:(res.data||[]);
+    if(isInit){ords.forEach(o=>{if(o.code)aKnown.add(o.code);});return;}
+    ords.forEach(o=>{
+      if(!o.code||aKnown.has(o.code))return;
+      aKnown.add(o.code);
+      aShowN(o);
+    });
+  }catch{}
+}
+
+function aShowN(o){
+  if(!aPendN.find(x=>x.code===o.code))aPendN.push(o);
+  aRenN();
+  aStartSoundLoop(); // ເລີ່ມດັງຕໍ່ເນື່ອງ
+}
+
+// ── ສຽງດັງຕໍ່ເນື່ອງທຸກ 4 ວິ ຈົນກ່ວາ Admin ກົດຮັບ ──
+function aStartSoundLoop(){
+  if(aSoundLoop)return; // ຖ້າດັງຢູ່ແລ້ວ ບໍ່ເລີ່ມໃໝ່
+  aPlayS();
+  aSoundLoop=setInterval(()=>{
+    if(!aPendN.length){aStopSoundLoop();return;}
+    if(Date.now()<aSnoozT)return; // snooze ຢູ່ ບໍ່ດັງ
+    aPlayS();
+  },4000);
+}
+
+function aStopSoundLoop(){
+  clearInterval(aSoundLoop);
+  aSoundLoop=null;
+}
+
+function aRenN(){
+  if(!aPendN.length){
+    document.getElementById("nov").classList.remove("on");
+    document.getElementById("nbd").classList.remove("on");
+    aStopSoundLoop();
+    return;
+  }
+  if(Date.now()<aSnoozT){
+    document.getElementById("nov").classList.remove("on");
+    const b=document.getElementById("nbd");b.classList.add("on");
+    document.getElementById("ncnt").textContent=aPendN.length;
+    return;
+  }
+  document.getElementById("nov").classList.add("on");
+  document.getElementById("nbd").classList.remove("on");
+  document.getElementById("nlist").innerHTML=aPendN.map(o=>
+    `<div style="background:rgba(var(--p3),.06);border:1px solid rgba(var(--p3),.2);border-radius:7px;padding:7px 9px;margin-bottom:5px">
+      <b style="color:var(--p)">#${o.code||"-"}</b>
+      <br><small>👤 ${o.customerName||"-"} · ${fN(o.totalAmount||0)} ₭</small>
+    </div>`
+  ).join("");
+}
+
+function aRemPN(code){
+  aPendN=aPendN.filter(o=>o.code!==code);
+  if(!aPendN.length)aStopSoundLoop(); // ຢຸດສຽງທັນທີເມື່ອຮັບໝົດ
+  aRenN();
+}
+
 function aViewN(){document.getElementById("nov").classList.remove("on");aNav(1);aLoadOrders();}
-function aSnooze(){aSnoozT=Date.now()+5*60*1000;aRenN();toast("info","ຊ່ວຍ 5 ນາທີ","");setTimeout(()=>{if(aPendN.length){aSnoozT=0;aRenN();aPlayS();}},5*60*1000);}
-function aReopenN(){aSnoozT=0;aRenN();}
-function aPlayS(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();[523,659,784].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(.2,ctx.currentTime+i*.15);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+i*.15+.2);o.start(ctx.currentTime+i*.15);o.stop(ctx.currentTime+i*.15+.25);});}catch{}}// ================================================================
+
+function aSnooze(){
+  aSnoozT=Date.now()+5*60*1000;
+  aStopSoundLoop();
+  aRenN();
+  toast("info","ຊ່ວຍຄາວ 5 ນາທີ","ສຽງຈະດັງໃໝ່ຫຼັງ 5 ນາທີ");
+  setTimeout(()=>{
+    if(aPendN.length){aSnoozT=0;aRenN();aStartSoundLoop();}
+  },5*60*1000);
+}
+
+function aReopenN(){aSnoozT=0;aRenN();if(aPendN.length)aStartSoundLoop();}
+
+function aPlayS(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    // ສຽງແຈ້ງເຕືອນ ດັງ-ດ້ວງ-ດິ່ງ
+    const notes=[659,784,880,784,659];
+    notes.forEach((f,i)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type="sine";o.frequency.value=f;
+      const t=ctx.currentTime+i*0.18;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(0.3,t+0.04);
+      g.gain.exponentialRampToValueAtTime(0.001,t+0.18);
+      o.start(t);o.stop(t+0.2);
+    });
+  }catch{}
+}// ================================================================
 // SUCCESS POPUP — ທຸລະກຳທຸກຊະນິດ
 // ================================================================
 const SP_THEMES = {
