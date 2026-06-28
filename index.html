@@ -1305,10 +1305,10 @@ function aRenOrds(ords){
     const isCOD=(o.payment||"").includes("COD");
     const stbs=sd.map(s=>`<button class="stb ${s.c}${o.orderStatus===s.k?" cur":""}" onclick="aUpdSt('${code}','${s.k}',this)">${s.l}</button>`).join("");
     const slip=o.slipUrl
-      ?`<img class="sth" src="${gdriveImg(o.slipUrl)}" onclick="aViewImg('${o.slipUrl}','Slip')" onerror="this.src='${gthumb(o.slipUrl,200)}';this.onerror=null">`
+      ?`<img class="sth" src="${gimg(o.slipUrl)}" onclick="aViewImg('${o.slipUrl}','Slip')" onerror="this.src='${gthumb(o.slipUrl,200)}';this.onerror=null">`
       :`<span style="font-size:15px">${o.slipStatus==="✅ ມີ"?"✅":"—"}</span>`;
     const bill=o.shippingBillUrl
-      ?`<img class="sth" src="${gdriveImg(o.shippingBillUrl)}" onclick="aViewImg('${o.shippingBillUrl}','ບິນຂົນສົ່ງ')" onerror="this.src='${gthumb(o.shippingBillUrl,200)}';this.onerror=null">`
+      ?`<img class="sth" src="${gimg(o.shippingBillUrl)}" onclick="aViewImg('${o.shippingBillUrl}','ບິນຂົນສົ່ງ')" onerror="this.src='${gthumb(o.shippingBillUrl,200)}';this.onerror=null">`
       :`<button class="upbb" data-code="${code}">📤 ອັບບິນ</button>`;
     const statusLabel={
       "ລໍຖ້າຮັບຍອດ":        "⏳ ລໍຖ້າຮັບຍອດ",
