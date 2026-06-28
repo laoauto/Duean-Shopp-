@@ -343,7 +343,7 @@ input:checked+.sldr::before{transform:translateX(18px);}
 </style>
 </head>
 <body>
-<button id="atrig" onclick="showLogin()">🔐 Admin</button>
+
 <div id="tr"></div>
 <input type="file" id="shipf" accept="image/*" style="display:none">
 
@@ -363,7 +363,17 @@ input:checked+.sldr::before{transform:translateX(18px);}
 <!-- CUSTOMER APP -->
 <div id="apc">
   <div class="chdr" id="chdr">
-    <div class="chdr-top">
+    <div class="chdr-top" style="position:relative">
+      <!-- Admin Login Button — ມຸມຂວາເທິງ -->
+      <button id="atrig" onclick="showLogin()" style="
+        position:absolute;top:8px;right:10px;
+        background:rgba(255,255,255,.2);
+        color:#fff;border:1.5px solid rgba(255,255,255,.4);
+        border-radius:20px;padding:4px 10px;
+        font-size:11px;font-weight:700;cursor:pointer;
+        display:flex;align-items:center;gap:4px;
+        white-space:nowrap;
+      ">🔐 ເຂົ້າລະບົບ</button>
       <img class="clogo" id="c-logo" src="" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22%3E%3Ccircle cx=%2240%22 cy=%2240%22 r=%2240%22 fill=%22%23C2185B%22/%3E%3C/svg%3E'">
       <div id="c-shopname" style="font-weight:900;font-size:19px"></div>
       <div id="c-slogan" style="font-size:11px;opacity:.88;margin-top:2px"></div>
@@ -1034,7 +1044,7 @@ function aLogout(){
   sessionStorage.removeItem("ds_auth");
   document.getElementById("apa").style.display="none";
   document.getElementById("apc").style.display="block";
-  document.getElementById("atrig").style.display="block";
+  document.getElementById("atrig").style.display="flex";
   clearInterval(aPollTmr);
 }
 
